@@ -1,4 +1,5 @@
 from mpos.apps import Activity
+import mpos.config
 import mpos.ui
 import mpos.ui.anim
 import mpos.ui.focus_direction
@@ -41,6 +42,12 @@ class QuasiNametag(Activity):
 
         # Add key event handler to container to catch all key events
         container.add_event_cb(self.global_key_handler, lv.EVENT.KEY, None)
+
+        print("Loading preferences...")
+        prefs = mpos.config.SharedPreferences("com.quasikili.quasinametag")
+        self.name_text = prefs.get_string("name_text", self.name_text)
+        self.fg_color = prefs.get_int("fg_color", self.fg_color)
+        self.bg_color = prefs.get_int("bg_color", self.bg_color)
 
         # Create both screens as children of the container
         self.create_edit_screen(container)
@@ -246,8 +253,6 @@ class QuasiNametag(Activity):
     def confirm_and_show_display(self, event):
         # Save the name from textarea
         self.name_text = self.name_ta.get_text()
-        if not self.name_text or len(self.name_text.strip()) == 0:
-            self.name_text = "Your Name"
 
         # Hide keyboard if visible
         self.hide_keyboard()
@@ -264,6 +269,13 @@ class QuasiNametag(Activity):
         focusgroup = lv.group_get_default()
         if focusgroup:
             mpos.ui.focus_direction.emulate_focus_obj(focusgroup, self.display_screen)
+
+        print("Saving preferences...")
+        editor = mpos.config.SharedPreferences("com.quasikili.quasinametag").edit()
+        editor.put_string("name_text", self.name_text)
+        editor.put_int("fg_color", self.fg_color)
+        editor.put_int("bg_color", self.bg_color)
+        editor.commit()
 
     def update_display_screen(self):
         # Set background color
