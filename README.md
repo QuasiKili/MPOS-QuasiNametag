@@ -7,12 +7,12 @@ A customizable digital nametag app for MicroPythonOS.
 - Text input with on-screen keyboard
 - Customizable foreground (text) color
 - Customizable background color
+- Storing the name and other preferences
 
 ## Version
 
-0.0.1
+0.0.2
 
 ## Possible improvements:
-- Storing the name and other preferences
 - Static or scrolling text display
 - Large, readable text display
